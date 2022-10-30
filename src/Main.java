@@ -1,7 +1,5 @@
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import javax.net.ssl.SSLContextSpi;
+import java.util.*;
 import java.util.stream.Collectors;
 
 enum RomanNumeral {
@@ -34,7 +32,9 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception{
-        System.out.println(calc("IX + IV"));
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        System.out.println(calc(input));
     }
 
     public static String calc(String input) throws Exception {
@@ -71,20 +71,19 @@ public class Main {
         int b = roman2arab(vars[1]);
         if (sign == '+')
             return (arabic2Roman(a + b));
+        if (sign == '*')
+            return (arabic2Roman(a * b));
         if (sign == '-'){
-            if (a - b < 0)
+            if (a - b <= 0)
                 throw new Exception("roman result is 0 or less");
             else
                 return (arabic2Roman(a - b));
         }
-        if (sign == '*')
-            return (arabic2Roman(a * b));
         else{
             if (b == 0)
                 throw new Exception("Division by zero");
             return (arabic2Roman(a / b));
         }
-
     }
 
     static boolean isRomanExpValid(String romanExp){
@@ -108,9 +107,6 @@ public class Main {
 
     static String arabic2Roman(int number) {
         int i = 0;
-        if ((number <= 0) || (number > 4000)) {
-            throw new IllegalArgumentException(number + " is out of range");
-        }
         List<RomanNumeral> romanNumerals = RomanNumeral.getReverseSortedValues();
         StringBuilder sb = new StringBuilder();
         while ((number > 0) && (i < romanNumerals.size())) {
